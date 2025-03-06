@@ -1,134 +1,206 @@
 #pragma once
 #include <cstdint>
+#include <Windows.h>
+//RYU ANIM OFFSET: 337D550 / NEW 3380E30
+//RYU WEAPON EQUIPPED OFFSET: 337D506 / NEW 3380DE6
+//RYU PROJECTILE OFFSET: 337D508 / NEW 3380DE8
+//RYU HP: 337D4D6 / NEW 3380DB6
 
-extern DWORD_PTR lopBaseAddress;
+extern "C" uintptr_t baseAddress;
 
-extern "C" uintptr_t pinoBaseAddress;
+extern "C" uintptr_t returnInjectTripleIS;
 
-extern "C" uintptr_t returnInjectPinoBaseAddress;
+extern "C" uintptr_t returnInjectDelimb1;
 
+extern "C" uintptr_t returnInjectDelimb2;
+
+extern "C" uintptr_t returnInjectDelimb3;
+
+extern "C" uintptr_t returnInjectAnim;
+
+extern "C" uintptr_t returnInjectHalfCut;
+
+extern "C" uintptr_t returnInjectFreeCam;
+
+extern "C" uintptr_t returnInjectFreeCamCall;
+
+extern "C" uintptr_t returnInjectInventoryCCNew;
+
+extern "C" uintptr_t returnInjectSound;
+
+extern "C" uintptr_t returnInjectC;
+
+extern "C" uintptr_t returnInjectFOV;
+
+extern "C" uintptr_t returnInjectDelimbFiends;
+
+extern "C" uintptr_t returnInjectCLoop;
+
+extern "C" uintptr_t returnInjectCoords;
+
+extern "C" uintptr_t returnInjectEventTrigger;
+
+extern "C" uintptr_t returnInjectDisableSpawns;
+
+extern "C" uintptr_t returnInjectEntDie;
+
+extern "C" uintptr_t returnInjectHalfCutHuman;
+
+extern "C" uintptr_t returnEnemyDmgReduction;
+
+extern "C" uintptr_t returnInjectEntHitData;
+
+extern "C" uintptr_t returnInjectAIDodge;
+
+extern "C" uintptr_t returnInjectRecoveryPunish;
+
+extern "C" uintptr_t RecoveryPunishLeaOffset;
+
+extern "C" uintptr_t RecoveryPunishLeaAddress;
+
+extern "C" uintptr_t returnInjectIDrop;
+
+extern "C" uintptr_t returnInjectUTCharge;
+
+extern "C" unsigned char tripleISBytes[];
+
+//DELIMB 
+extern "C" float resistance;
+extern "C" float detectTest;
+extern "C" float detectTest2;
+extern "C" float newVal1;
+extern "C" float newVal2;
+extern "C" float newVal3;
+extern "C" float newVal4;
+extern "C" float teleCoords;
+extern "C" float telePlayer;
+extern "C" float resistancemax;
+extern "C" float guilthrowDmgMulp;
+extern "C" float scytheDelimbMulp;
+extern "C" float enmaDelimbMulp;
+extern "C" float femaleDelimbMulp;
+extern "C" float highDelimbMulp;
+extern float masterEnemyDMGMulp;
+extern DWORD_PTR masterEnemyHPMulpAddress[];
+extern size_t masterEnemyHPMulpAddressSize;
+extern "C" float masterEnemyDmgReductionMulp;
+extern "C" float mentorEnemyDmgReductionMulp;
+extern "C" float warriorEnemyDmgReductionMulp;
+extern "C" float fsDelimbMulp;
+
+//HITSTOP
+extern uintptr_t microStutterOffset01;
+extern uintptr_t microStutterOffset02;
+
+//ENEMY AI
+extern "C" bool isNinjaGrabSpeed;
+extern "C" bool greyNinjaGrabSpeed;
+extern "C" bool zedGrabSpeed;
+extern "C" bool lizGrabSpeedTail;
+extern "C" bool tripleIS;
+extern "C" bool vangelfGrabSpeed;
+
+//GAMEPLAY
+extern BYTE microStutter;
+extern bool storyHPCC;
+
+//CAMERA
+extern "C" bool isFreeCamAll;
+extern "C" bool isFreeCamIzunaOnly;
+
+extern "C" bool inventoryCCNew;
+
+//SPAWN COUNTERS
+extern "C" uint8_t cBattleRespawnCount;
+extern "C" uint8_t cBattleRespawnCount2;
+extern "C" uint8_t cBattleRespawnCount3;
+extern "C" uint8_t cBattleRespawnCount4;
+extern "C" uint8_t cBattleRespawnCount5;
+extern "C" uint8_t cBattleRespawnCount6;
+extern "C" uint8_t cBattleRespawnCount7;
+extern "C" uint8_t cBattleRespawnCount8;
+extern "C" uint8_t cBattleRespawnCount9;
+extern "C" uint8_t cManualSpawnResetCounter;
+
+//AUDIO
+extern "C" BYTE mainMenuTrack;
+extern "C" BYTE ch1HeroTrack;
+extern "C" BYTE ch14HeroTrack;
+
+//CAMERA
+extern "C" float fovValue;
+extern "C" float defaultFOV;
+
+extern "C" const uint16_t lycanHalfCutTable[];
+extern "C" const uint16_t fsMoveTable[];
+
+//INJECT C
+extern "C" uint8_t canSpawn;
+extern "C" uint8_t canspawn2;
+
+//DEBUG
+extern bool freezeEnemies;
+
+
+//DIFFICULTY RELATED
+extern uint8_t diffInjected;
+extern const uintptr_t activeChapterOffset;
+extern "C" uintptr_t activeChapterAddress;
+
+extern "C" uintptr_t activeDiffOffset;
 extern "C" uint8_t currentChapter;
 
-//GET PLAYER BASE ADDRESS
-extern "C" uintptr_t returnInjectPinoBaseAddress;
+extern "C" const uintptr_t pHpOffset;
+extern "C" uintptr_t pHpAddress;
 
-//CHAPTER 1
-extern "C" const unsigned char LD_Outer_Station[];
-extern "C" size_t LD_Outer_Station_Size;
-
-//CHAPTER 2
-extern "C" const unsigned char LV_Inner_UpperStreet[];
-extern "C" size_t LV_Inner_UpperStreet_Size;
-
-//CHAPTER 3
-extern "C" const unsigned char LV_Inner_Factory[];
-extern "C" size_t LV_Inner_Factory_Size;
-
-//CHAPTER 4
-extern "C" const unsigned char LV_Inner_Cathedral[];
-extern "C" size_t LV_Inner_Cathedral_Size;
-
-//CHAPTER 5
-extern "C" const unsigned char LV_Krat_Old_Town[];
-extern "C" size_t LV_Krat_Old_Town_Size;
-
-//CHAPTER 6
-extern "C" const unsigned char LV_Krat_EastEndWard[];
-extern "C" size_t LV_Krat_EastEndWard_Size;
-
-//CHAPTER 7
-extern "C" const unsigned char LV_Outer_Exhibition[];
-extern "C" size_t LV_Outer_Exhibition_Size;
-
-//CHAPTER 8
-extern "C" const unsigned char LV_Outer_Grave[];
-extern "C" size_t LV_Outer_Grave_Size;
-
-//CHAPTER 9
-extern "C" const unsigned char LV_Outer_CentralStatinB[];
-extern "C" size_t LV_Outer_CentralStatinB_Size;
-
-//CHAPTER 11
-extern "C" const unsigned char LV_Outer_Underdark_A[];
-extern "C" size_t LV_Outer_Underdark_A_Size;
+extern "C" const uintptr_t pAnimOffset;
+extern "C" uintptr_t pAnimAddress;
 
 
-//CHAPTER 12
-extern "C" const unsigned char LV_Monastery_A[];
-extern "C" size_t LV_Monastery_A_Size;
+extern const uintptr_t enemyAliveOffset;
+extern const uintptr_t enemyAliveOffset2;
+extern "C" uintptr_t enemyAliveAddress;
+extern "C" uintptr_t enemyAliveAddress2;
+extern "C" uint8_t cDeleteEnemy;
 
-//CHAPTER 13
-extern "C" const unsigned char LV_Monastery_B[];
-extern "C" size_t LV_Monastery_B_Size;
+//RAND
+extern "C" int randomNum;
+extern "C" uint16_t entDied;
 
-//FETCH ACTIVE LEVEL (Used for scaling purposes)
-extern "C" uintptr_t returnInjectLvlHelper;
+//SPAWN
+extern "C" bool ch1RasetsuDisableMinions;
+extern "C" bool ch2RasetsuDisableMinions;
+extern "C" bool ch14RasForDoppler;
 
-//ENEMY HP SCALING
-extern "C" uintptr_t returnInjectHPScaler;
-extern "C" uintptr_t injectHPScaler0875;
-extern "C" uintptr_t injectHPScaler;
-//POP rax will restore original value anyway so make it void and save original value into variable and make that final regardless
-extern "C" void(*HPScalerFunction)(int, int*);
-extern "C" int hpScaledValue;
+//AIDODGE
+extern "C" uintptr_t entHitAddress;
+extern "C" uintptr_t entHitID;
+extern "C" uint8_t isNinjaDodgeBlockChance;
+extern "C" uint8_t isFiendNinjaDodgeBlockChance;
+extern "C" uint8_t lizDodgeBlockChance;
 
-extern const int chapter_one_hp_data[];
-extern const size_t chapter_one_hp_data_size;
+struct EntHitInfo
+{
+	uintptr_t address;
+	uint16_t ID;
+	uint8_t Playerstate;
+};
 
-extern const int chapter_two_hp_data[];
-extern const size_t chapter_two_hp_data_size;
+extern "C" EntHitInfo entHitInfo;
 
-extern const int chapter_three_hp_data[];
-extern const size_t chapter_three_hp_data_size;
+//PLAYER IDENT
+extern "C" uintptr_t playerIdentOffset1;
+extern "C" uintptr_t playerIdentAddress1;
 
-extern const int chapter_four_hp_data[];
-extern const size_t chapter_four_hp_data_size;
+//ENEMY AI
+extern "C" bool izunaRecoveryPunish;
 
-extern const int chapter_five_hp_data[];
-extern const size_t chapter_five_hp_data_size;
+extern "C" const uint16_t izunaAnimIDs[];
+extern "C" const size_t izunaAnimIDsSize;
 
-extern const int chapter_six_hp_data[];
-extern const size_t chapter_six_hp_data_size;
+extern "C" const uint16_t iDropTable[];
+extern "C" const size_t iDropTableSize;
 
-extern const int chapter_seven_hp_data[];
-extern const size_t chapter_seven_hp_data_size;
-
-extern const int chapter_eight_hp_data[];
-extern const size_t chapter_eight_hp_data_size;
-
-extern const int chapter_nine_hp_data[];
-extern const size_t  chapter_nine_hp_data_size;
-
-extern const int chapter_eleven_hp_data[];
-extern const size_t  chapter_eleven_hp_data_size;
-
-extern const int chapter_twelve_hp_data[];
-extern const size_t  chapter_twelve_hp_data_size;
-
-extern const int chapter_thirteen_hp_data[];
-extern const size_t chapter_thirteen_hp_data_size;
-
-extern const int boss_hp_data[];
-extern const size_t boss_hp_data_size;
-
-extern const int stalker_hp_data[];
-extern const size_t stalker_hp_data_size;
-
-extern const int helpmate_hp_data[];
-extern const size_t helpmate_hp_data_size;
-
-extern const int miniboss_hp_data[];
-extern const size_t miniboss_hp_data_size;
-
-extern const int miniboss_hp_data_assign[];
-extern const size_t miniboss_hp_data_assign_size;
-
-
-extern const int quest_hp_data[];
-extern const size_t quest_hp_data_size;
-
-extern const int hotel_puppet_training_hp_data[];
-extern const size_t hotel_puppet_training_hp_data_size;
-
-extern const int stalker_rabbit_hp_data[];
-extern const size_t stalker_rabbit_hp_data_size;
+//GAMEPLAY
+extern "C" float etChargeTime;
+extern "C" float utChargeTime;
