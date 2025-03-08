@@ -406,6 +406,9 @@ void ClearVars() {
     chp6SecondSaveBtlCounterMentor = 0;
     chp6RebirthBtlCounterWarrior = 0;
     chp6SecondSaveBtlCounterWarrior = 0;
+    chp6WindmillBtlCounter = 0;
+    chp6WindmillBtlCounterMentor = 0;
+    chp6WindmillBtlCounterWarrior = 0;
 
     entHitInfo.address = 0;
     entHitInfo.ID = 0;
@@ -472,6 +475,7 @@ DWORD WINAPI MainThread(LPVOID param) {
     playerIdentAddress1 = baseAddress + playerIdentOffset1;
     RecoveryPunishLeaAddress = baseAddress + RecoveryPunishLeaOffset;
     pAnimAddress = baseAddress + pAnimOffset;
+    playerSurfaceTypeAddress = baseAddress + playerSurfaceTypeOffset;
 
     int hookCount = sizeof(hooks) / sizeof(HookInfo);
     ApplyHooks(hooks, hookCount, baseAddress);
@@ -521,7 +525,7 @@ DWORD WINAPI MainThread(LPVOID param) {
         randomNum = dist(rng);
 
 
-        //CLEAR VARIABLES AND OTHER TASKS ON DEATH
+
         if (playerHP <= 0) { 
             ClearVars(); 
         }
@@ -529,8 +533,6 @@ DWORD WINAPI MainThread(LPVOID param) {
       
 
         
-
-        //HOOKS BASED ON DIFF (WARRIOR - MASTER AND ABOVE)
         if (diffInjected != currentDiff) {
             switch (currentDiff) {
             case 4: {

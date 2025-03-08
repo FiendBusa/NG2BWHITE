@@ -1752,12 +1752,12 @@ void  __attribute__((naked))InjectCoords() {
         //CHAPTER 6
         "coordsChapterSixMaster:"
 
-        //FIRST BATTLE
-        "mov rdi, qword ptr [rsi];"
+        //FIRST BATTLE why do I have this lol?
+       /* "mov rdi, qword ptr [rsi];"
         "add rdi,rax;"
 
         "cmp rdi,rbp;"
-        "je coordsCH601;"
+        "je coordsCH601;"*/
 
         //BRIDGE AFTER FIRST BATTLE (03) TALISMAN REBIRTH IS
         "mov rdi, qword ptr [rsi + 0x08];"
@@ -1769,9 +1769,17 @@ void  __attribute__((naked))InjectCoords() {
         "jmp exitInjectCoords; "
 
         "coordsCH601:"
+        //WINDMILL WATER
+        "cmp DWORD PTR[rdx + 0x02 * 0x04], 0x0101;"
+        "je coordsCH602;"
+        //BRIDGE AFTER FIRST BATTLE (03) TALISMAN REBIRTH IS
         "cmp DWORD PTR[rdx], 0x0101;"
         "jne exitInjectCoords;"
         "movaps xmm10, [rcx];"
+        "jmp setCoords;"
+
+        "coordsCH602:"
+        "movaps xmm10,[rcx+ 0x30];"
         "jmp setCoords;"
 
         //CHAPTER 14
@@ -1966,7 +1974,7 @@ void  __attribute__((naked))InjectEventTrigger() {
         "lea rbx, qword ptr [rip + masterninjaCH6OriginalSpawnTriggerOffsets];"
         "mov r11,r8;"
         "mov rcx,0x00;"
-        "mov rdx,0x04;"
+        "mov rdx,0x07;"
         "cmp word ptr  [rax], 0x0A; "
         "je cBtlLoopStart;"
 
@@ -2305,6 +2313,16 @@ void  __attribute__((naked))InjectEventTrigger() {
                 "cmp rcx,0x00;"
                 "je cTriggerEventCH601;"
 
+                "mov rdx,0x02;"
+
+                //WINDMILL
+                "cmp rcx,0x03;"
+                "je cTriggerEventCH602;"
+
+                //THIRD SAVE
+                "cmp rcx,0x06;"
+                "je cTriggerEventsDisable;"
+
                 "jmp codecbattle;"
 
                 "cTriggerEventCH601:"
@@ -2322,6 +2340,27 @@ void  __attribute__((naked))InjectEventTrigger() {
                 "je codecbattle;"
                 "mov DWORD PTR [r9], 0x0101;"
                 "mov rcx, [r9+0x04];"
+                "jmp cStartTriggerEvent02;"
+
+                "cTriggerEventCH602:"
+                //PLAYER ON WATER SURFACE?
+                "mov rdx, qword ptr [rip + playerSurfaceTypeAddress];"
+                "cmp byte ptr [rdx],0x04;"
+                "jl codecbattle;"
+                //BATTLE ALREADY COMPLETED?
+                "mov rdx, qword ptr [rbx + 0x20];"
+                "add rdx,r8;"
+                "cmp byte ptr [rdx],0xFF;"
+                "je codecbattle;"
+                //DONT DISABLE TRIGGER (RE-ENABLE)
+                "mov rdx, qword ptr [rbx + 0x10];"
+                "add rdx,r8;"
+                "mov byte ptr [rdx],0x01;"
+                //START EVENT TRIGGER
+                "cmp DWORD PTR [r9 + 0x02 * 0x04], 0x0F0F;"
+                "je codecbattle;"
+                "mov DWORD PTR [r9 + 0x02 * 0x04], 0x0101;"
+                "mov rcx, [r9+0x03 * 0x04];"
                 "jmp cStartTriggerEvent02;"
 
 
@@ -2435,6 +2474,7 @@ void  __attribute__((naked))InjectEventTrigger() {
         //CH6
         "mov byte ptr [rip + chp6RebirthBtlCounter],0x00;"
         "mov byte ptr [rip + chp6SecondSaveBtlCounter],0x00;"
+        "mov byte ptr [rip + chp6WindmillBtlCounter],0x00;"
         "mov byte ptr [rip+cDeleteEnemy],0x00;"
         "add rsi, 0x02;"
         "jmp cTriggerEventsDisable;"
@@ -2937,7 +2977,7 @@ void  __attribute__((naked))InjectC() {
                 "cmp rcx,rdi;"
                 "je setEnemyCHP601;"
 
-                //IS REBIRTH
+                //IS REBIRTH + //WINDMILL
                 "mov rdi,[rbx + 0x08];"
                 "add rdi,r9;"
                 "cmp rcx,rdi;"
@@ -2962,7 +3002,12 @@ void  __attribute__((naked))InjectC() {
                 "mov byte ptr [rip+canspawn2],0x00;"
                 "jmp spawnMage;"
 
+                //IS REBIRTH
                 "setEnemyCHP602:"
+                "cmp dword ptr [r8 + 0x02 * 0x04],0x0101;"
+                "je setEnemyCHP602a;"
+                "cmp dword ptr [r8],0x0101;"
+                "jne exitInjectC;"
                 //BATTLE COMPLETED MARKER
                 "mov r11, qword ptr [rbx + 0x18];"
                 "lea rsi, qword ptr [rip + chp6RebirthSpawn];"
@@ -2970,6 +3015,18 @@ void  __attribute__((naked))InjectC() {
                 "lea r15, qword ptr [rip + chp6RebirthBtlCounter];"
                 "movzx r13, byte ptr [rip + chp6RebirthBtlMaxSpawnCap];"
                 "jmp spawnEnemyOnlyWaveAliveOne;"
+                
+                //WINDMILL
+                "setEnemyCHP602a:"
+                "mov byte ptr [rdx + 0x14], 0x09;"
+                //BATTLE TRACKER OFFSET
+                "mov r12,0x02;"
+                "mov r11, qword ptr [rbx + 0x20];"
+                "lea rsi, qword ptr [rip + chp6WindmillSpawn];"
+                "mov rcx, [rip + chp6WindmillSpawnSize];"
+                "lea r15, qword ptr [rip + chp6WindmillBtlCounter];"
+                "movzx r13, byte ptr [rip + chp6WindmillBtlMaxSpawnCap];"
+                "jmp spawnEnemyOnlyWaveAliveOneFixed;"
 
                 "setEnemyCHP603:"
                 "lea rsi, qword ptr [rip + chp6SecondSaveAmbushSpawn];"
@@ -3409,6 +3466,55 @@ void  __attribute__((naked))InjectC() {
         //ACTIVE ALIVE ENEMIES CHECK
         "cmp byte ptr [r10], r13b;"
         "ja exitInjectC;"
+        "mov dword ptr [r8], 0x0F0F;"
+        //SPAWNS COMPLETED CHECK
+        "xor rax,rax;"
+        "mov rax, [r15];"
+        "cmp rax, rcx;"
+        "ja disableEnemyEvent;"
+        //SPAWN ENEMY
+        "mov r14w, word ptr [rsi + rax * 0x02];"
+        "mov dword ptr [r8], 0x0101;"
+        "mov [rdx + 0x04], r14w;"
+        "inc byte ptr [r15];"
+        "mov byte ptr [rip + cDeleteEnemy], 0x00;"
+        "jmp exitInjectC;"
+
+        //SPAWN SYSTEM - WAVE BASED - ONLY ENEMY ID
+        "spawnEnemyOnlyWaveAliveOneFixed:"
+        "cmp dword ptr [r8 + r12 * 0x04], 0x0101;"
+        "jne exitInjectC;"
+        "dec rcx;"
+        "mov byte ptr [rip + cDeleteEnemy], 0x01;"
+        //ACTIVE ALIVE ENEMIES CHECK
+        "cmp byte ptr [r10], r13b;"
+        "ja exitInjectC;"
+        "mov dword ptr [r8 + r12 * 0x04], 0x0F0F;"
+        //SPAWNS COMPLETED CHECK
+        "xor rax,rax;"
+        "mov rax, [r15];"
+        "cmp rax, rcx;"
+        "ja disableEnemyEvent;"
+        //SPAWN ENEMY
+        "mov r14w, word ptr [rsi + rax * 0x02];"
+        "mov dword ptr [r8 + r12 * 0x04], 0x0101;"
+        "mov [rdx + 0x04], r14w;"
+        "inc byte ptr [r15];"
+        "mov byte ptr [rip + cDeleteEnemy], 0x00;"
+        "jmp exitInjectC;"
+
+        "spawnEnemyOnlyWaveAliveOneBothEnemyCountCheck:"
+        "cmp dword ptr [r8], 0x0101;"
+        "jne exitInjectC;"
+        "dec rcx;"
+        "mov byte ptr [rip + cDeleteEnemy], 0x01;"
+        //ACTIVE ALIVE ENEMIES CHECK
+        "cmp byte ptr [r10], r13b;"
+        "ja exitInjectC;"
+        "inc r13;"
+        "cmp byte ptr [r12], r13b;"
+        "ja exitInjectC;"
+        "dec r13;"
         "mov dword ptr [r8], 0x0F0F;"
         //SPAWNS COMPLETED CHECK
         "xor rax,rax;"

@@ -548,6 +548,9 @@ BattleCoords warriorbtlCH6BattleCoords[] = {
     // WINDMILL WATER SECTION
     {-160.9598999f, -1.650000095f, 20.04831505f},
 
+    //THIRD SAVE
+    {-143.3095856f, 6.230000496f, 128.6762238f}
+
 
 
 };
@@ -570,7 +573,9 @@ DistanceThreshold warriorbtlCH6DistanceThreshold[] = {
     //IS NINJA CHEST
     {5.00f},
     //WINDMILL WATER SECTION
-    {2500.00f}
+    {2500.00f},
+    //THIRD SAVE
+    {50.00f}
 
 
 
@@ -623,6 +628,10 @@ SpawnCoords warriorbtlCH6SpawnCoords[] = {
     const size_t chp6SecondSaveAmbushSpawnSizeWarrior = sizeof(chp6SecondSaveAmbushSpawnWarrior) / sizeof(chp6SecondSaveAmbushSpawnWarrior[0]);
     uint8_t chp6SecondSaveBtlCounterWarrior = 0;
 
+    const uint16_t chp6WindmillSpawnWarrior[] = { 0x0032, 0x0032, 0x0032, 0x0032, 0x0075 };
+    const size_t chp6WindmillSpawnSizeWarrior = sizeof(chp6WindmillSpawnWarrior) / sizeof(chp6WindmillSpawnWarrior[0]);
+    uint8_t chp6WindmillBtlCounterWarrior = 0;
+    const uint8_t chp6WindmillBtlMaxSpawnCapWarrior = 255;
 
 
 #pragma endregion
@@ -1297,6 +1306,9 @@ uintptr_t masterninjaCH14OriginalSpawnTriggerOffsets[] = {
 
          // WINDMILL WATER SECTION
          {-160.9598999f, -1.650000095f, 20.04831505f},
+         
+         // THIRD SAVE
+        {-143.3095856f, 6.230000496f, 128.6762238f}
         
 
 
@@ -1320,7 +1332,9 @@ uintptr_t masterninjaCH14OriginalSpawnTriggerOffsets[] = {
         //IS NINJA CHEST
         {5.00f},
         //WINDMILL WATER SECTION
-        {2500.00f}
+        {2500.00f},
+        // THIRD SAVE
+         {50.00f}
 
 
 
@@ -1373,6 +1387,11 @@ uintptr_t masterninjaCH14OriginalSpawnTriggerOffsets[] = {
     const size_t chp6SecondSaveAmbushSpawnSize = sizeof(chp6SecondSaveAmbushSpawn) / sizeof(chp6SecondSaveAmbushSpawn[0]);
     uint8_t chp6SecondSaveBtlCounter = 0;
 
+    const uint16_t chp6WindmillSpawn[] = { 0x009E, 0x009E, 0x009E, 0x009E, 0x00A7 };
+    const size_t chp6WindmillSpawnSize = sizeof(chp6WindmillSpawn) / sizeof(chp6WindmillSpawn[0]);
+    uint8_t chp6WindmillBtlCounter = 0;
+    const uint8_t chp6WindmillBtlMaxSpawnCap = 255;
+
     //Mentor
     const uint16_t chp6RebirthSpawnMentor[] = { 0x0038, 0x0038, 0x0038 };
     const size_t chp6RebirthSpawnSizeMentor = sizeof(chp6RebirthSpawnMentor) / sizeof(chp6RebirthSpawnMentor[0]);
@@ -1383,6 +1402,10 @@ uintptr_t masterninjaCH14OriginalSpawnTriggerOffsets[] = {
     const size_t chp6SecondSaveAmbushSpawnSizeMentor = sizeof(chp6SecondSaveAmbushSpawnMentor) / sizeof(chp6SecondSaveAmbushSpawnMentor[0]);
     uint8_t chp6SecondSaveBtlCounterMentor = 0;
 
+    const uint16_t chp6WindmillSpawnMentor[] = { 0x009E, 0x009E, 0x009E, 0x009E, 0x0075 };
+    const size_t chp6WindmillSpawnSizeMentor = sizeof(chp6WindmillSpawnMentor) / sizeof(chp6WindmillSpawnMentor[0]);
+    uint8_t chp6WindmillBtlCounterMentor = 0;
+    const uint8_t chp6WindmillBtlMaxSpawnCapMentor = 255;
 
 
 

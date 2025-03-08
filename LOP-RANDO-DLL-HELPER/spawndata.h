@@ -58,6 +58,12 @@ extern "C" const uint16_t chp6SecondSaveAmbushSpawn[];
 extern "C" uint8_t chp6SecondSaveBtlCounter;
 extern "C" const size_t chp6SecondSaveAmbushSpawnSize;
 
+extern "C" const uint16_t chp6WindmillSpawn[];
+extern "C" const size_t chp6WindmillSpawnSize;
+extern "C" uint8_t chp6WindmillBtlCounter;
+extern "C" const uint8_t chp6WindmillBtlMaxSpawnCap;
+
+
 extern "C" const uint16_t chp6RebirthSpawnMentor[];
 extern "C" const size_t chp6RebirthSpawnSizeMentor;
 extern "C" uint8_t chp6RebirthBtlCounterMentor;
@@ -67,6 +73,10 @@ extern "C" const uint16_t chp6SecondSaveAmbushSpawnMentor[];
 extern "C" uint8_t chp6SecondSaveBtlCounterMentor;
 extern "C" const size_t chp6SecondSaveAmbushSpawnSizeMentor;
 
+extern "C" const uint16_t chp6WindmillSpawnMentor[];
+extern "C" const size_t chp6WindmillSpawnSizeMentor;
+extern "C" uint8_t chp6WindmillBtlCounterMentor;
+extern "C" const uint8_t chp6WindmillBtlMaxSpawnCapMentor;
 
 
 
@@ -152,6 +162,11 @@ extern "C" const uint16_t chp6SecondSaveAmbushSpawnWarrior[];
 extern "C" uint8_t chp6SecondSaveBtlCounterWarrior;
 extern "C" const size_t chp6SecondSaveAmbushSpawnSizeWarrior;
 
+extern "C" const uint16_t chp6WindmillSpawnWarrior[];
+extern "C" const size_t chp6WindmillSpawnSizeWarrior;
+extern "C" uint8_t chp6WindmillBtlCounterWarrior;
+extern "C" const uint8_t chp6WindmillBtlMaxSpawnCapWarrior;
+
 extern "C" BattleCoords warriorbtlCH10BattleCoords[];
 extern "C" BattleTracker warriorbtlCH10Tracker[];
 extern "C" DistanceThreshold warriorbtlCH10DistanceThreshold[];
@@ -171,6 +186,7 @@ extern const size_t warriorbtlCH1TrackerSize;
 extern const size_t warriorbtlCH2TrackerSize;
 extern const size_t warriorbtlCH3TrackerSize;
 extern const size_t warriorbtlCH4TrackerSize;
+extern const size_t warriorbtlCH6TrackerSize;
 extern const size_t warriorbtlCH10TrackerSize;
 extern const size_t warriorbtlCH14TrackerSize;
 

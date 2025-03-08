@@ -5,6 +5,7 @@
 //RYU WEAPON EQUIPPED OFFSET: 337D506 / NEW 3380DE6
 //RYU PROJECTILE OFFSET: 337D508 / NEW 3380DE8
 //RYU HP: 337D4D6 / NEW 3380DB6
+//RYU CERTAIN STATES (I.E 04 = on water) 3380F03
 
 extern "C" uintptr_t baseAddress;
 
@@ -204,3 +205,6 @@ extern "C" const size_t iDropTableSize;
 //GAMEPLAY
 extern "C" float etChargeTime;
 extern "C" float utChargeTime;
+
+extern "C" uintptr_t playerSurfaceTypeOffset;
+extern "C" uintptr_t playerSurfaceTypeAddress;

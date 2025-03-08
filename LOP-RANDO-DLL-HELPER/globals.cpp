@@ -225,3 +225,6 @@ extern "C" uintptr_t pAnimAddress = 0;
 
 float etChargeTime = 50.00;
 float utChargeTime = 110.00;
+
+uintptr_t playerSurfaceTypeOffset = 0x3380F03;
+uintptr_t playerSurfaceTypeAddress = 0;
