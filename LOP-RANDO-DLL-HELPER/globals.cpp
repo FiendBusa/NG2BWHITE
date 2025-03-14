@@ -65,6 +65,9 @@ uintptr_t returnInjectIDrop = 0;
 
 uintptr_t returnInjectUTCharge = 0;
 
+uintptr_t returnInjectInput = 0;
+
+uintptr_t returnInjectLockCam = 0;
 
 unsigned char tripleISBytes[] = {
         0x00, 0x00, 0x01, 0x00, 0x44, 0x00, 0x00, 0x00, 0x0E, 0x00, 0xFF, 0xFF,
@@ -97,7 +100,7 @@ float masterEnemyDMGMulp = 1.70f;
 float masterEnemyDmgReductionMulp = 2.00f;
 float mentorEnemyDmgReductionMulp = 1.00f;
 float warriorEnemyDmgReductionMulp = 1.00f;
-float fsDelimbMulp = 2.00;
+float fsDelimbMulp = 1.50;
 
 
 DWORD_PTR masterEnemyHPMulpAddress[] = {
@@ -152,7 +155,7 @@ BYTE mainMenuTrack = 0x52;
 BYTE ch1HeroTrack = 0x3D;
 BYTE ch14HeroTrack = 0x4D;
 
-float fovValue = 1.00f;
+float fovValue = 0.13f;
 float defaultFOV = 0.87f;
 
 const uint16_t lycanHalfCutTable[] = {
@@ -228,3 +231,15 @@ float utChargeTime = 110.00;
 
 uintptr_t playerSurfaceTypeOffset = 0x3380F03;
 uintptr_t playerSurfaceTypeAddress = 0;
+
+uint32_t userInput = 0x00000000;
+
+uintptr_t lockcamAdd1 = 0x222EE90;
+uintptr_t lockcamAdd2 = 0x2FD2150;
+uintptr_t lockcamAdd3 = 0x222EEC4;
+
+uint8_t canWaterDragonAttacks = 0;
+bool canWaterDragonOT = false;
+uint8_t waterDragonBattleStart = false;
+bool waterDragonDived = false;
+bool canSwapCoords = false;

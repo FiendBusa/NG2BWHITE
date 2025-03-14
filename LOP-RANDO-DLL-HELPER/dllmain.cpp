@@ -82,14 +82,14 @@ void LoadConfig() {
     newVal1 = ini.GetDoubleValue(L"DELIMB", L"globalDelimbMulp", 1.0f);
     highDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"highDelimbMulp", 1.80f);
     guilthrowDmgMulp = ini.GetDoubleValue(L"DELIMB", L"guilthrowDmgMulp", 1.50f);
-    scytheDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"scytheDelimbMulp", 1.50f);
-    enmaDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"emnaDelimbMulp", 1.50f);
-    femaleDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"femaleDelimbMulp", 1.50f);
+    scytheDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"scytheDelimbMulp", 1.20f);
+    enmaDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"emnaDelimbMulp", 1.20f);
+    femaleDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"femaleDelimbMulp", 1.00f);
     masterEnemyDMGMulp = ini.GetDoubleValue(L"DELIMB", L"masterEnemyHPMulp", 1.80f);
     masterEnemyDmgReductionMulp = ini.GetDoubleValue(L"DELIMB", L"masterEnemyDmgReductionMulp", 2.00f);
     mentorEnemyDmgReductionMulp = ini.GetDoubleValue(L"DELIMB", L"mentorEnemyDmgReductionMulp", 1.00f);
     warriorEnemyDmgReductionMulp = ini.GetDoubleValue(L"DELIMB", L"warriorEnemyDmgReductionMulp", 1.00f);
-    fsDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"fsDelimbMulp", 25.00f);
+    fsDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"fsDelimbMulp", 1.50f);
 
     //MURAMASA
     //weaponUpgradeCost = static_cast<uint16_t>(ini.GetLongValue(L"SHOP", L"weaponUpgradeCost", 30000));
@@ -247,7 +247,9 @@ HookInfo hooks[] = {
     {0xFBF5AB, 15, InjectAIDodge, "InjectAIDodge", &returnInjectAIDodge, 0},
     {0xFF538D, 15, InjectRecoveryPunish, "InjectRecoveryPunish", &returnInjectRecoveryPunish,0},
     {0x15C3BBD,15, InjectIDrop, "InjectIDrop", &returnInjectIDrop,0},
-    {0xFAB2E8, 16, InjectUTCharge,"InjectUTCharge", &returnInjectUTCharge,0}
+    {0xFAB2E8, 16, InjectUTCharge,"InjectUTCharge", &returnInjectUTCharge,0},
+    {0xB8409A, 16, InjectInput, "InjectInput", &returnInjectInput,0},
+    {0xB843C6, 15, InjectLockCam, "InjectLockCam", &returnInjectLockCam,0}
     //{0x17552C4, 19, InjectDiffLoad, "InjectDiffLoad",& returnInjectDiffLoad}
 
     //{0xF80C82, 18, InjectHalfCut, "InjectHalfCut",& returnInjectHalfCut,0}
@@ -413,11 +415,17 @@ void ClearVars() {
     entHitInfo.address = 0;
     entHitInfo.ID = 0;
     entHitInfo.Playerstate = 0;
-    
+
+    canWaterDragonAttacks = 0;
+    canWaterDragonOT = false;
+    waterDragonBattleStart = 0;
+    waterDragonDived = false;
+    canSwapCoords = false;
+
     ClearBattleTrackingData(masterMasterBattleTrackers, masterMasterBattleTrackersSize, masterMasterBattleTrackersCount);
     ClearBattleTrackingData(warriorWarriorBattleTrackers, warriorWarriorBattleTrackersSize, warriorWarriorBattleTrackersCount);
 
-        
+   
 }
 void ApplyHelpers(DWORD_PTR baseAddress)
 {

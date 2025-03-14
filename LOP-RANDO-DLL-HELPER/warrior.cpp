@@ -1480,9 +1480,22 @@ void  __attribute__((naked))InjectCWarrior() {
             "cmp rcx,rdi;"
             "je setEnemyCHP603;"
 
+            //TOO LAZY
+            "cmp r14,0x0B2;"
+            "je chp6GhostFish;"
+
+            "cmp r14,0x039;"
+            "jne exitInjectC;"
+            "mov byte ptr [rdx + 0x14],0x03;"
+            "mov byte ptr [rdx + 0x1C],0x03;"
 
 
 
+            "jmp exitInjectC;"
+
+            "chp6GhostFish:"
+            "mov byte ptr [rdx + 0x14],0x04;"
+            "mov byte ptr [rdx + 0x1C],0x06;"
             "jmp exitInjectC;"
 
             "setEnemyCHP601:"

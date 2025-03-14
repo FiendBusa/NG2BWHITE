@@ -6,6 +6,72 @@
 
 #pragma region GLOBAL_HOOKS
 
+void  __attribute__((naked))InjectLockCam() {
+    //ADD LOWER DIFF LATER
+    __asm__ volatile(".intel_syntax noprefix;"
+        "push rax;"
+        "push rbx;"
+        "push rcx;"
+        "push rdx;"
+        "xor rbx,rbx;"
+        "xor rcx,rcx;"
+        "xor rdx,rdx;"
+
+        "mov rax, qword ptr [rip + baseAddress];"
+        "mov rbx, [rip + lockcamAdd1];"
+
+        "cmp word ptr [rax + rbx],0xFFFF;"
+        "je exitLockCam;"
+
+        "mov rcx, [rip + lockcamAdd2];"
+       // "mov rdx, [rip + lockcamAdd3];"
+
+        "cmp byte ptr [rdi+0x49],0x08;"
+        "je unlockCam;"
+
+        "cmp byte ptr [rdi+0x49],0x04;"
+        "jne exitLockCam;"
+
+        "mov byte ptr [rax + rcx],0x00;"
+        //"mov byte ptr [rax + rdx],0x00;"
+
+        "jmp exitLockCam;"
+
+        "unlockCam:"
+        "mov byte ptr [rax + rcx],0x02;"
+        //"mov byte ptr [rax + rdx],0x02;"
+
+        "exitLockCam:"
+        "pop rdx;"
+        "pop rcx;"
+        "pop rbx;"
+        "pop rax;"
+        "movups xmm0,[rdi+0x48];"
+        "movups [rax],xmm0;"
+        "movups xmm1,[rdi+0x58];"
+        "movups [rax+0x10],xmm1;"
+        "jmp qword ptr [rip + returnInjectLockCam];"
+
+
+
+
+
+        );
+}
+
+__attribute__((naked)) void InjectInput() {
+
+    __asm(".intel_syntax noprefix;"
+    ".intel_syntax noprefix;"
+        "mov rdi,rcx;"
+        "mov eax, [rcx + 0x48];"
+        "mov [rcx + 0x54], eax;"
+        "movzx ebx, byte ptr[rcx + 0x00000099];"
+        "mov [rip + userInput], eax;"
+        "jmp QWORD PTR [rip + returnInjectInput];"
+        );
+}
+
 void  __attribute__((naked))InjectUTCharge() {
 
     __asm__ volatile(".intel_syntax noprefix;"
@@ -648,8 +714,8 @@ void  __attribute__((naked))InjectAnim() {
         "je fiendIS;"
         "cmp byte ptr [rbx+0x18],0x2F;"
         "je fiendGrey;"
-        /*"cmp byte ptr [rbx+0x18],0x39;"
-        "je waterDragon;"*/
+        "cmp byte ptr [rbx+0x18],0x39;"
+        "je waterDragon;"
         "cmp byte ptr [rbx+0x18],0x03;"
         "je pVanGelf;"
         "cmp byte ptr [rbx+0x18],0xA7;"
@@ -730,6 +796,11 @@ void  __attribute__((naked))InjectAnim() {
           ""*/
         "test rdi,rdi;"
         "je exitAnim;"
+
+        "cmp byte ptr [rbx + 0x18], 0xDD;"
+        "je isPMomiji;"
+
+
         "cmp byte ptr [rbp + 0x3380DE6],0x21;"
         "je isPFang;"
 
@@ -742,6 +813,8 @@ void  __attribute__((naked))InjectAnim() {
          "je isPDualSwords;"
          "cmp byte ptr [rbp + 0x319CBE6],0x13;"
          "je isPDualSwords;"*/
+
+            "jmp exitAnim;"
 
         "cmp byte ptr [rbp + 0x3380DE8],0xA0;"
         "jne exitAnim;"
@@ -785,31 +858,97 @@ void  __attribute__((naked))InjectAnim() {
         "mov rdi,0xA1B;"
         "jmp exitAnim;"
 
+        "isPMomiji:"
+        "cmp rdi,0x13B;"
+        "jne exitAnim;"
+        "mov rdi,0x135;"
+        "jmp exitAnim;"
+
         "waterDragon:"
         /* "cmp byte ptr [rbp + 0x35C4218], 0x04;"
          "jne exitAnim;"*/
-        "cmp word ptr [rbp + 0x31A2866],0x028A;"
-        "jle waterDragonOT;"
-        /*"cmp byte ptr [rip+canWaterDragonAttacks],0x01;"
-        "je waterDragonAttacks;"*/
-        "jmp exitAnim;"
+        //"cmp word ptr [rax + 0x09AC6],0x028A;"
+        //"jle waterDragonOT;"
+        ///*"cmp byte ptr [rip+canWaterDragonAttacks],0x01;"
+        //"je waterDragonAttacks;"*/
+        //"jmp exitAnim;"
 
         "waterDragonAttacks:"
+        "cmp byte ptr [rip + waterDragonBattleStart],0x02;"
+        "jl waterDragonPreStart;"
         "cmp cx,0xA8;"
         "jne exitAnim;"
         "test rdi,rdi;"
         "jne exitAnim;"
-        "mov rdi,0x1D;"
-        /*"mov byte ptr [rip+canWaterDragonAttacks],0xFF;"*/
+        "cmp byte ptr [rbp + 0x3380F03],0x04;"
+        "jnae exitAnim;"
+        "xor rdi,rdi;"
+        "inc byte ptr [rip+canWaterDragonAttacks];"
+        "cmp byte ptr [rip + canWaterDragonAttacks],0x06;"
+        "jle exitAnim;"
+        "mov byte ptr [rip + canWaterDragonAttacks],0x00;"
+        "mov rdi,0x04;"//MOVE AROUND
+        "cmp r8, 0x019;"
+        "jle exitAnim;"
+        "xor rdi,rdi;"
+
+           
+
+        "mov rdi,0x015;"//WHIP
+        "cmp r8, 0x032;"
+        "jle exitAnim;"
+
+        "mov di,0x01D;"
+        "cmp r8, 0x06C;"
+        "jle exitAnim;"
+
+        "xor rdi,rdi;"
+        "jmp exitAnim;"
+
+       /* "cmp byte ptr [rip + waterDragonDived],0x00;"
+        "jnz waterDragonDiveReset;"
+       
+        "mov byte ptr [rip + waterDragonDived],0x01;"
+        "jmp exitAnim;"*/
+
+        "waterDragonDiveReset:"
+        "mov byte ptr [rip + waterDragonDived],0x00;"
+        "mov di,0x04;"
+        "mov cx,0x6F;"
+        "jmp exitAnim;"
+
+        "waterDragonAttackReset:"
+        "mov byte ptr [rip + canWaterDragonAttacks],0x00;"
+        "xor rdi,rdi;"
+        "jmp exitAnim;"
+
+        "waterDragonPreStart:"
+        /*"cmp di,0x01F;"
+        "jne exitAnim;"*/
+        "inc byte ptr [rip + waterDragonBattleStart];"
+        "mov di,0x01B;"
         "jmp exitAnim;"
 
         "waterDragonOT:"
-       /* "cmp byte ptr [rip+canWaterDragonOT],0x00;"
-        "jnz exitAnim;"
-        "mov byte ptr [rip+canWaterDragonOT],0x01;"
-        "mov di,0x25;"*/
-        "jmp exitAnim;"
+        "push rax;"
+        "mov rax, qword ptr [rbx];"
+        "cmp rax,r15;"
+        "jl waterDragonOTFail;"
 
+        /*"cmp byte ptr [rbp + 0x3380F03],0x04;"
+        "jnae exitAnim;"*/
+        "cmp word ptr [rax + 0x09AC6],0x028A;"
+        "jae waterDragonOTFail;"
+        "cmp byte ptr [rip+canWaterDragonOT],0x00;"
+        "jnz waterDragonOTFail;"
+        "mov byte ptr [rip+canWaterDragonOT],0x01;"
+        "mov di,0x25;"
+        "pop rax;"
+        "jmp exitAnimRefacWhen;"
+
+        "waterDragonOTFail:"
+        "pop rax;"
+        "jmp exitAnimRefacWhen;"
         //PORTED HORRIBLY STRAIGHT FROM CT LOL
         "pWolf:"
         "cmp di,0x3A;"
@@ -1097,6 +1236,7 @@ void  __attribute__((naked))InjectAnim() {
         "jmp exitAnim;"
         "applyAnimFix2:"
         "mov di,0x1B;"
+
         "exitAnim:"
         "pop r8;"
         "pop rbp;"
@@ -1106,6 +1246,12 @@ void  __attribute__((naked))InjectAnim() {
         "mov rdx, qword ptr [rip + baseAddress];"
         "lea rdx, qword ptr [rdx + 0x1F37270];"
         "mov rdx,[rdx+rax*0x08];"
+        "cmp word ptr [rbx + 0x18],0x0039;"
+        "je waterDragonOT;"
+
+        "jmp exitAnimRefacWhen;"
+
+        "exitAnimRefacWhen:"
         "cmp rdx,-01;"
         "jmp qword ptr [rip + returnInjectAnim];"
         );
@@ -2989,9 +3135,32 @@ void  __attribute__((naked))InjectC() {
                 "cmp rcx,rdi;"
                 "je setEnemyCHP603;"
 
+                //A FISH SPAWN THAT WATER DRAGON CALLS
+                "mov rdi,[rbx + 0x30];"
+                "add rdi,r9;"
+                "cmp rcx,rdi;"
+                "je setEnemyCHP604;"
 
 
+                "mov rdi,[rbx + 0x48];"
+                "add rdi,r9;"
+                "cmp rcx,rdi;"
+                "je setEnemyCHP605;"
 
+                //TOO LAZY
+                "cmp r14,0x0B2;"
+                "je chp6GhostFish;"
+
+                "cmp r14,0x039;"
+                "jne exitInjectC;"
+                "mov byte ptr [rdx + 0x14],0x03;"
+                "mov byte ptr [rdx + 0x1C],0x03;"
+
+                "jmp exitInjectC;"
+
+                "chp6GhostFish:"
+                "mov byte ptr [rdx + 0x14],0x04;"
+                "mov byte ptr [rdx + 0x1C],0x06;"
                 "jmp exitInjectC;"
 
                 "setEnemyCHP601:"
@@ -3033,6 +3202,31 @@ void  __attribute__((naked))InjectC() {
                 "mov rcx, [rip + chp6SecondSaveAmbushSpawnSize];"
                 "lea r15, qword ptr [rip + chp6SecondSaveBtlCounter];"
                 "jmp spawnEnemyOnlyNoWave;"
+
+                "setEnemyCHP604:"
+                "mov byte ptr [rip + canSwapCoords],0x01;"
+                "cmp byte ptr [r12],0x03;"
+                "ja exitInjectC;"
+                "mov rdi, [rbx + 0x38];"
+                "add rdi,r9;"
+                "mov byte ptr [rdi],0x01;"
+                "mov rdi, [rbx + 0x40];"
+                "add rdi,r9;"
+                "mov byte ptr [rdi],0x01;"
+                "jmp exitInjectC;"
+
+                "setEnemyCHP605:"
+                "cmp byte ptr [rip + canSwapCoords],0x00;"
+                "jz spawnGajaRed;"
+                /*"cmp byte ptr [r10],0x02;"
+                "ja exitInjectC;"*/
+                "mov byte ptr [rip + cDeleteEnemy],0x01;"
+                "cmp byte ptr [r12],0x03;"
+                "ja exitInjectC;"
+                "mov byte ptr [rip + cDeleteEnemy],0x00;"
+                "mov byte ptr [rip + canSwapCoords],0x00;"
+                "mov word ptr [rdx + 0x064],0x45A0;"
+                "jmp spawnVangelfGoldFly;"
 
               
            
@@ -3192,14 +3386,14 @@ void  __attribute__((naked))InjectC() {
                     "cmp rcx,rdi;"
                     "je setEnemyCHP1402;"
 
-                    "cmp r14d, 0x104;"
+                    "cmp r14, 0x0104;"
                     "jne exitInjectC;"
 
                     "cmp byte ptr [rip + ch14RasForDoppler],0x00;"
                     "jz exitInjectC;"
 
-                    "cmp bx,0x2560;"
-                    "jne exitInjectC;"
+                    /*"cmp bx,0x2560;"
+                    "jne exitInjectC;"*/
 
                     "mov r14,0x00A5;"
                     "mov [rdx+0x04], r14d;"

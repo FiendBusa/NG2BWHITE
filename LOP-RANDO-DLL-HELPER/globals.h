@@ -63,6 +63,10 @@ extern "C" uintptr_t returnInjectIDrop;
 
 extern "C" uintptr_t returnInjectUTCharge;
 
+extern "C" uintptr_t returnInjectInput;
+
+extern "C" uintptr_t returnInjectLockCam;
+
 extern "C" unsigned char tripleISBytes[];
 
 //DELIMB 
@@ -208,3 +212,18 @@ extern "C" float utChargeTime;
 
 extern "C" uintptr_t playerSurfaceTypeOffset;
 extern "C" uintptr_t playerSurfaceTypeAddress;
+
+extern "C" uint32_t userInput;
+
+//LOCK UNLOCK BOSS CAM
+extern "C" uintptr_t lockcamAdd1;
+extern "C" uintptr_t lockcamAdd2;
+extern "C" uintptr_t lockcamAdd3;
+
+//WATER DRAGON
+extern "C" uint8_t canWaterDragonAttacks;
+extern "C" bool canWaterDragonOT;
+extern "C" uint8_t waterDragonBattleStart;
+extern "C" bool waterDragonDived;
+
+extern "C" bool canSwapCoords;

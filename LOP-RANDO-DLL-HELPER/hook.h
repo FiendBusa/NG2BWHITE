@@ -26,3 +26,5 @@ extern "C" void InjectAIDodge();
 extern "C" void InjectRecoveryPunish();
 extern "C" void InjectIDrop();
 extern "C" void InjectUTCharge();
+extern "C" void InjectInput();
+extern "C" void InjectLockCam();
