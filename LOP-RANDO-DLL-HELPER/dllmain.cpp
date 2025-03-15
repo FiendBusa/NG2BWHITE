@@ -137,6 +137,7 @@ void LoadConfig() {
     fovValue = ini.GetDoubleValue(L"CAMERA", L"fov", 0.13f);
     isFreeCamIzunaOnly = ini.GetBoolValue(L"CAMERA", L"isFreeCamIzunaOnly", true);
     isFreeCamAll = ini.GetBoolValue(L"CAMERA", L"isFreeCamAll", false);
+    cameraHitImpact = ini.GetBoolValue(L"CAMERA", L"cameraHitImpact", true);
 
     ////DANGER ZONE
     //instantResume = ini.GetBoolValue(L"DANGERZONE", L"instantResume", false);
@@ -233,7 +234,7 @@ HookInfo hooks[] = {
     {0x10823A9, 14, InjectDelimb2, "InjectDelimb2", &returnInjectDelimb2, 0},
     {0x1001436, 18, InjectAnim, "InjectAnim", &returnInjectAnim, 0},
     {0x10521A1, 14, InjectFreeCam, "InjectFreeCam", &returnInjectFreeCam, 0},
-    {0x1720704, 18, InjectInventoryCCNew, "InjectInventoryCCNew", &returnInjectInventoryCCNew, 0},
+    //{0x1720704, 18, InjectInventoryCCNew, "InjectInventoryCCNew", &returnInjectInventoryCCNew, 0},
     {0x15FA594, 19, InjectSound, "InjectSound", &returnInjectSound, 0},
     {0x104AFC0, 17, InjectFOV, "InjectFOV", &returnInjectFOV, 0},
     {0x17389B9, 15, InjectCLoop, "InjectCLoop", &returnInjectCLoop, 0},
@@ -249,7 +250,8 @@ HookInfo hooks[] = {
     {0x15C3BBD,15, InjectIDrop, "InjectIDrop", &returnInjectIDrop,0},
     {0xFAB2E8, 16, InjectUTCharge,"InjectUTCharge", &returnInjectUTCharge,0},
     {0xB8409A, 16, InjectInput, "InjectInput", &returnInjectInput,0},
-    {0xB843C6, 15, InjectLockCam, "InjectLockCam", &returnInjectLockCam,0}
+    {0xB843C6, 15, InjectLockCam, "InjectLockCam", &returnInjectLockCam,0},
+    {0x103C8E7, 16, InjectCamShake, "InjectCamShake", &returnInjectCamShake,0}
     //{0x17552C4, 19, InjectDiffLoad, "InjectDiffLoad",& returnInjectDiffLoad}
 
     //{0xF80C82, 18, InjectHalfCut, "InjectHalfCut",& returnInjectHalfCut,0}

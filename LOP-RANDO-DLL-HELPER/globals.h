@@ -67,6 +67,8 @@ extern "C" uintptr_t returnInjectInput;
 
 extern "C" uintptr_t returnInjectLockCam;
 
+extern "C" uintptr_t returnInjectCamShake;
+
 extern "C" unsigned char tripleISBytes[];
 
 //DELIMB 
@@ -112,6 +114,7 @@ extern bool storyHPCC;
 //CAMERA
 extern "C" bool isFreeCamAll;
 extern "C" bool isFreeCamIzunaOnly;
+extern "C" bool cameraHitImpact;
 
 extern "C" bool inventoryCCNew;
 

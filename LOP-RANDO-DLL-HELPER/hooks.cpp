@@ -6,6 +6,34 @@
 
 #pragma region GLOBAL_HOOKS
 
+__attribute__((naked)) void InjectCamShake() {
+
+    __asm(".intel_syntax noprefix;"
+    ".intel_syntax noprefix;"
+        "movaps[rsp + 0x000000E0], xmm7;"
+        "push rax;"
+        "mov rax, qword ptr [rip + baseAddress];"
+        "cmp byte ptr [rip + cameraHitImpact],0x00;"
+        "setz al;"
+
+        "test al,al;"
+        "jnz exitInjectCamShake;"
+        
+        "cmp word ptr [rax + 0x2F535D4],0x6F6F;"
+        "jne exitInjectCamShake;"
+
+
+        "mulss xmm0,[rax+0x2FC62D8];"
+        "pop rax;"
+        "jmp QWORD PTR [rip + returnInjectCamShake];"
+
+        "exitInjectCamShake:"
+        "pop rax;"
+        "mulss xmm0,[rdi+0x00000090];"
+        "jmp QWORD PTR [rip + returnInjectCamShake];"
+        );
+}
+
 void  __attribute__((naked))InjectLockCam() {
     //ADD LOWER DIFF LATER
     __asm__ volatile(".intel_syntax noprefix;"

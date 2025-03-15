@@ -69,6 +69,8 @@ uintptr_t returnInjectInput = 0;
 
 uintptr_t returnInjectLockCam = 0;
 
+uintptr_t returnInjectCamShake = 0;
+
 unsigned char tripleISBytes[] = {
         0x00, 0x00, 0x01, 0x00, 0x44, 0x00, 0x00, 0x00, 0x0E, 0x00, 0xFF, 0xFF,
         0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x09, 0x00, 0x00, 0x00, 0x18, 0x00,
@@ -136,6 +138,7 @@ bool storyHPCC = true;
 
 bool isFreeCamAll = false;
 bool isFreeCamIzunaOnly = true;
+bool cameraHitImpact = true;
 
 bool inventoryCCNew;
 

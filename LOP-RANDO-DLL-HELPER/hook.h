@@ -28,3 +28,4 @@ extern "C" void InjectIDrop();
 extern "C" void InjectUTCharge();
 extern "C" void InjectInput();
 extern "C" void InjectLockCam();
+extern "C" void InjectCamShake();
