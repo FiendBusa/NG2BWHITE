@@ -85,11 +85,16 @@ void LoadConfig() {
     scytheDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"scytheDelimbMulp", 1.20f);
     enmaDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"emnaDelimbMulp", 1.20f);
     femaleDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"femaleDelimbMulp", 1.00f);
-    masterEnemyDMGMulp = ini.GetDoubleValue(L"DELIMB", L"masterEnemyHPMulp", 1.80f);
+    masterEnemyDMGMulp = ini.GetDoubleValue(L"DELIMB", L"masterEnemyHPMulp", 1.70f);
+    mentorEnemyDMGMulp = ini.GetDoubleValue(L"DELIMB", L"mentorEnemyHPMulp", 1.20f);
+    warriorEnemyDMGMulp = ini.GetDoubleValue(L"DELIMB", L"warriorEnemyHPMulp", 1.00f);
     masterEnemyDmgReductionMulp = ini.GetDoubleValue(L"DELIMB", L"masterEnemyDmgReductionMulp", 2.00f);
     mentorEnemyDmgReductionMulp = ini.GetDoubleValue(L"DELIMB", L"mentorEnemyDmgReductionMulp", 1.00f);
     warriorEnemyDmgReductionMulp = ini.GetDoubleValue(L"DELIMB", L"warriorEnemyDmgReductionMulp", 1.00f);
     fsDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"fsDelimbMulp", 1.50f);
+    bowChargeDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"bowChargeDelimbMulp", 5.00f);
+    bowETDmgMulp = ini.GetDoubleValue(L"DELIMB", L"bowETDmgMulp", 1.00f);
+    bowUTDmgMulp = ini.GetDoubleValue(L"DELIMB", L"bowUTDmgMulp", 5.00f);
 
     //MURAMASA
     //weaponUpgradeCost = static_cast<uint16_t>(ini.GetLongValue(L"SHOP", L"weaponUpgradeCost", 30000));
@@ -109,9 +114,10 @@ void LoadConfig() {
     vangelfGrabSpeed = ini.GetBoolValue(L"ENEMYAI", L"vangelfGrabSpeed", false);
     lizGrabSpeedTail = ini.GetBoolValue(L"ENEMYAI", L"lizGrabSpeedTail", true);
     tripleIS = ini.GetBoolValue(L"ENEMYAI", L"tripleIS", true);
-    isNinjaDodgeBlockChance = static_cast<BYTE>(ini.GetLongValue(L"ENEMYAI", L"isNinjaDodgeBlockChance", 100));
+    isNinjaDodgeBlockChance = static_cast<BYTE>(ini.GetLongValue(L"ENEMYAI", L"isNinjaDodgeBlockChance", 40));
     isFiendNinjaDodgeBlockChance = static_cast<BYTE>(ini.GetLongValue(L"ENEMYAI", L"isFiendNinjaDodgeBlockChance", 100));
     lizDodgeBlockChance = static_cast<BYTE>(ini.GetLongValue(L"ENEMYAI", L"lizDodgeBlockChance", 100));
+    brownNinjaDodgeBlockChance = static_cast<BYTE>(ini.GetLongValue(L"ENEMYAI", L"brownNinjaDodgeBlockChance", 40));
     izunaRecoveryPunish = ini.GetBoolValue(L"ENEMYAI", L"punishIzunaRecovery", true);
 
     //AUDIO
@@ -251,7 +257,9 @@ HookInfo hooks[] = {
     {0xFAB2E8, 16, InjectUTCharge,"InjectUTCharge", &returnInjectUTCharge,0},
     {0xB8409A, 16, InjectInput, "InjectInput", &returnInjectInput,0},
     {0xB843C6, 15, InjectLockCam, "InjectLockCam", &returnInjectLockCam,0},
-    {0x103C8E7, 16, InjectCamShake, "InjectCamShake", &returnInjectCamShake,0}
+    {0x103C8E7, 16, InjectCamShake, "InjectCamShake", &returnInjectCamShake,0},
+    {0x100538B, 16, InjectUltimateCharge, "InjectUltimateCharge",&returnInjectChargeUltimate,0},
+    {0x15C3E81, 16, InjectWepDmg, "InjectWepDmg",&returnInjectWepDmg, 0}
     //{0x17552C4, 19, InjectDiffLoad, "InjectDiffLoad",& returnInjectDiffLoad}
 
     //{0xF80C82, 18, InjectHalfCut, "InjectHalfCut",& returnInjectHalfCut,0}
@@ -339,6 +347,7 @@ void WriteFloat(DWORD_PTR address, float value) {
     *(float*)address = value;
     VirtualProtect((void*)address, sizeof(float), oldProtect, &oldProtect);
 }
+
 void WriteFloats(DWORD_PTR *addresses, size_t size, FLOAT value) {
     for (size_t i = 0; i < size; i++) {
         DWORD_PTR addy = addresses[i] + baseAddress;
@@ -424,6 +433,9 @@ void ClearVars() {
     waterDragonDived = false;
     canSwapCoords = false;
 
+    canChargeCustomUltimate = false;
+    skipTask = false;
+
     ClearBattleTrackingData(masterMasterBattleTrackers, masterMasterBattleTrackersSize, masterMasterBattleTrackersCount);
     ClearBattleTrackingData(warriorWarriorBattleTrackers, warriorWarriorBattleTrackersSize, warriorWarriorBattleTrackersCount);
 
@@ -457,7 +469,6 @@ void ApplyHelpers(DWORD_PTR baseAddress)
 
 
 
-
 DWORD WINAPI MainThread(LPVOID param) {
     Sleep(2000);
 
@@ -486,6 +497,12 @@ DWORD WINAPI MainThread(LPVOID param) {
     RecoveryPunishLeaAddress = baseAddress + RecoveryPunishLeaOffset;
     pAnimAddress = baseAddress + pAnimOffset;
     playerSurfaceTypeAddress = baseAddress + playerSurfaceTypeOffset;
+    openMuramasaShopAddress = baseAddress + openMuramasaShopOffset;
+    injectChargeUltimateJE += baseAddress;
+    injectChargeUltimateCall += baseAddress;
+
+    uintptr_t mentorEnemyHpMulpAddress = masterEnemyHPMulpAddress[1] + baseAddress;
+    uintptr_t warriorEnemyHpMulpAddress = masterEnemyHPMulpAddress[2] + baseAddress;
 
     int hookCount = sizeof(hooks) / sizeof(HookInfo);
     ApplyHooks(hooks, hookCount, baseAddress);
@@ -521,12 +538,19 @@ DWORD WINAPI MainThread(LPVOID param) {
     ////DMG MULP scythe delimb gamemodule.dll+FEA0C9 
     //uintptr_t startAddress = baseAddress + 0x1EAACF8;
     //uintptr_t endAddress = baseAddress + 0x1EAAF74;
-    /*if (masterEnemyDMGMulp > 0.00f){ */WriteFloats(masterEnemyHPMulpAddress, masterEnemyHPMulpAddressSize, masterEnemyDMGMulp); //} //WriteEnemyHPMulp(startAddress, endAddress, 2.00f, masterEnemyDMGMulp) ; }
+    /*if (masterEnemyDMGMulp > 0.00f){ */ //} //WriteEnemyHPMulp(startAddress, endAddress, 2.00f, masterEnemyDMGMulp) ; }
+
+    WriteFloats(masterEnemyHPMulpAddress, masterEnemyHPMulpAddressSize, masterEnemyDMGMulp);
+    WriteFloat(mentorEnemyHpMulpAddress, mentorEnemyDMGMulp);
+    WriteFloat(warriorEnemyHpMulpAddress, warriorEnemyDMGMulp);
 
     //CCSTORYHP
     if (storyHPCC) { WriteByte(baseAddress + 0x1701738, 0xEB); }
 
     ApplyHelpers(baseAddress);
+
+
+
 
     while (true) {
 
@@ -539,7 +563,7 @@ DWORD WINAPI MainThread(LPVOID param) {
         if (playerHP <= 0) { 
             ClearVars(); 
         }
-
+       
       
 
         
@@ -585,7 +609,10 @@ DWORD WINAPI MainThread(LPVOID param) {
 
             WriteByte(baseAddress + microStutterOffset01, microStutter);
             WriteByte(baseAddress + microStutterOffset02, microStutter);
-            /*if (masterEnemyDMGMulp > 0.00f) { */WriteFloats(masterEnemyHPMulpAddress, masterEnemyHPMulpAddressSize, masterEnemyDMGMulp); //}//WriteEnemyHPMulp(startAddress, endAddress, 2.00f, masterEnemyDMGMulp); }
+
+            WriteFloats(masterEnemyHPMulpAddress, masterEnemyHPMulpAddressSize, masterEnemyDMGMulp);
+            WriteFloat(mentorEnemyHpMulpAddress, mentorEnemyDMGMulp);
+            WriteFloat(warriorEnemyHpMulpAddress, warriorEnemyDMGMulp);
 
             if (storyHPCC) {
                 WriteByte(baseAddress + 0x1701738, 0xEB);
@@ -593,13 +620,12 @@ DWORD WINAPI MainThread(LPVOID param) {
             else {
                 WriteByte(baseAddress + 0x1701738, 0x74);
             }
-        }
-            
-            
-            
+        }         
         
-
-
+        if (GetAsyncKeyState(0x25) & 0x8000) {
+            *(BYTE*)openMuramasaShopAddress = 0x01;
+            Sleep(1000);
+        }
 
         Sleep(10);
 

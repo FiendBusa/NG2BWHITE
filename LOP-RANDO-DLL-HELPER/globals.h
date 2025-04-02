@@ -69,6 +69,14 @@ extern "C" uintptr_t returnInjectLockCam;
 
 extern "C" uintptr_t returnInjectCamShake;
 
+extern "C" uintptr_t returnInjectChargeUltimate;
+
+extern "C" uintptr_t injectChargeUltimateJE;
+
+extern "C" uintptr_t injectChargeUltimateCall;
+
+extern "C" uintptr_t returnInjectWepDmg;
+
 extern "C" unsigned char tripleISBytes[];
 
 //DELIMB 
@@ -87,13 +95,22 @@ extern "C" float scytheDelimbMulp;
 extern "C" float enmaDelimbMulp;
 extern "C" float femaleDelimbMulp;
 extern "C" float highDelimbMulp;
+extern "C" float bowChargeDelimbMulp;
+extern "C" float bowETDmgMulp;
+extern "C" float bowUTDmgMulp;
+
+//THIS IS ACTUALLY HP MULP
 extern float masterEnemyDMGMulp;
+extern float mentorEnemyDMGMulp;
+extern float warriorEnemyDMGMulp;
+
 extern DWORD_PTR masterEnemyHPMulpAddress[];
 extern size_t masterEnemyHPMulpAddressSize;
 extern "C" float masterEnemyDmgReductionMulp;
 extern "C" float mentorEnemyDmgReductionMulp;
 extern "C" float warriorEnemyDmgReductionMulp;
 extern "C" float fsDelimbMulp;
+
 
 //HITSTOP
 extern uintptr_t microStutterOffset01;
@@ -186,6 +203,7 @@ extern "C" uintptr_t entHitID;
 extern "C" uint8_t isNinjaDodgeBlockChance;
 extern "C" uint8_t isFiendNinjaDodgeBlockChance;
 extern "C" uint8_t lizDodgeBlockChance;
+extern "C" uint8_t brownNinjaDodgeBlockChance;
 
 struct EntHitInfo
 {
@@ -230,3 +248,11 @@ extern "C" uint8_t waterDragonBattleStart;
 extern "C" bool waterDragonDived;
 
 extern "C" bool canSwapCoords;
+
+//OPEN MURAMASA SHOP
+extern "C" uintptr_t openMuramasaShopOffset;
+extern "C" uintptr_t openMuramasaShopAddress;
+
+
+extern "C" bool canChargeCustomUltimate;
+extern "C" bool skipTask;

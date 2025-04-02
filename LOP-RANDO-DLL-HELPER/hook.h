@@ -29,3 +29,5 @@ extern "C" void InjectUTCharge();
 extern "C" void InjectInput();
 extern "C" void InjectLockCam();
 extern "C" void InjectCamShake();
+extern "C" void InjectUltimateCharge();
+extern "C" void InjectWepDmg();

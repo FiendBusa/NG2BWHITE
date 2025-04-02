@@ -71,6 +71,14 @@ uintptr_t returnInjectLockCam = 0;
 
 uintptr_t returnInjectCamShake = 0;
 
+uintptr_t returnInjectChargeUltimate = 0;
+
+uintptr_t injectChargeUltimateJE = 0x10053C2;
+
+uintptr_t injectChargeUltimateCall = 0x10054B0;
+
+uintptr_t returnInjectWepDmg;
+
 unsigned char tripleISBytes[] = {
         0x00, 0x00, 0x01, 0x00, 0x44, 0x00, 0x00, 0x00, 0x0E, 0x00, 0xFF, 0xFF,
         0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x09, 0x00, 0x00, 0x00, 0x18, 0x00,
@@ -99,14 +107,21 @@ float enmaDelimbMulp = 1.50f;
 float femaleDelimbMulp = 1.50f;
 float highDelimbMulp = 1.80f;
 float masterEnemyDMGMulp = 1.70f;
+float mentorEnemyDMGMulp = 1.20f;
+float warriorEnemyDMGMulp = 1.00f;
 float masterEnemyDmgReductionMulp = 2.00f;
 float mentorEnemyDmgReductionMulp = 1.00f;
 float warriorEnemyDmgReductionMulp = 1.00f;
 float fsDelimbMulp = 1.50;
+float bowChargeDelimbMulp = 5.00f;
+float bowETDmgMulp = 1.00f;
+float bowUTDmgMulp = 5.00f;
 
-
+//CHANGED TO INCLUDE MENTOR AND WARRIOR
 DWORD_PTR masterEnemyHPMulpAddress[] = {
-     0x1EAAD80
+     0x1EAAD80, // MASTER
+     0x1EAAD74, // MENTOR
+     0x1EAAD68 // WARRIOR
    //HP MULP 0x1EAAD80
     //MELEE DAMAGE 0x1EAAD84
     // GRAB DAMAGE 0x1EAAD88
@@ -120,7 +135,7 @@ DWORD_PTR masterEnemyHPMulpAddress[] = {
     0x1EAAEE8,0x1EAAD84,0x1EAADC8*/
 };
 
-size_t masterEnemyHPMulpAddressSize = sizeof(masterEnemyHPMulpAddress) / sizeof(masterEnemyHPMulpAddress[0]);
+size_t masterEnemyHPMulpAddressSize = 1;//sizeof(masterEnemyHPMulpAddress) / sizeof(masterEnemyHPMulpAddress[0]);
 
 uintptr_t microStutterOffset01 = 0x1529E35;
 uintptr_t microStutterOffset02 = 0x1529E3F;
@@ -209,9 +224,10 @@ bool ch14RasForDoppler = false;
 
 uintptr_t entHitAddress = 0;
 uintptr_t entHitID = 0;
-uint8_t isNinjaDodgeBlockChance = 100;
+uint8_t isNinjaDodgeBlockChance = 40;
 uint8_t isFiendNinjaDodgeBlockChance = 100;
 uint8_t lizDodgeBlockChance = 100;
+uint8_t brownNinjaDodgeBlockChance = 40;
 
 EntHitInfo entHitInfo;
 
@@ -246,3 +262,10 @@ bool canWaterDragonOT = false;
 uint8_t waterDragonBattleStart = false;
 bool waterDragonDived = false;
 bool canSwapCoords = false;
+
+
+uintptr_t openMuramasaShopOffset = 0x215C7A2;
+uintptr_t openMuramasaShopAddress = 0;
+
+bool canChargeCustomUltimate = false;
+bool skipTask = false;

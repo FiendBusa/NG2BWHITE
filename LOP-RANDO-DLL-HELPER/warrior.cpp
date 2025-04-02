@@ -1365,6 +1365,8 @@ void  __attribute__((naked))InjectCWarrior() {
         "mov BYTE PTR [rip + cDeleteEnemy], 0x01;"
         "cmp BYTE PTR [r10], 0x05;"
         "jae exitInjectC;"
+        "cmp BYTE PTR [r12], 0x06;"
+        "jae exitInjectC;"
         "mov DWORD PTR [r8], 0x0F0F;"
         "cmp BYTE PTR [rip + cBattleRespawnCount], 0x1F;"
         "jae exitInjectC;"

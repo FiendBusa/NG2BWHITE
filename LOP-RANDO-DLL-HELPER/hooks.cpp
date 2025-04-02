@@ -6,6 +6,104 @@
 
 #pragma region GLOBAL_HOOKS
 
+__attribute__((naked)) void InjectWepDmg() {
+
+    __asm(".intel_syntax noprefix;"
+    ".intel_syntax noprefix;"
+         "push rax;"
+         "cvtdq2ps xmm1, xmm1;"
+         "mov rax, qword ptr [rip + playerIdentAddress1];"
+         "cmp rax,r10;"
+         "jne exitInjectDmg;"
+         
+         
+         "mov rax, qword ptr [rip + pAnimAddress];"
+         "movzx rax, word ptr [rax];"
+         "movss xmm9, [rip + bowETDmgMulp];"
+         "cmp ax,0x0A48;"
+         "je increaseDmg;"
+         "movss xmm9, [rip + bowUTDmgMulp];"
+         "cmp ax,0x0A49;"
+         "je increaseDmg;"
+
+         "jmp exitInjectDmg;"
+
+         "increaseDmg:"
+         "movss xmm0,xmm9;"
+
+         "exitInjectDmg:"
+         "pop rax;"
+         "mulss xmm1, xmm0;"
+         "mulss xmm1, xmm6;"
+         "mulss xmm1, [rdx + 0x08];"
+         "jmp qword ptr [rip + returnInjectWepDmg];"
+
+       
+        );
+}
+
+__attribute__((naked)) void InjectUltimateCharge() {
+
+    __asm(".intel_syntax noprefix;"
+    ".intel_syntax noprefix;"
+        "movzx r8d,ax;"
+        "lea edx, [rbx+0x05];"
+        "call qword ptr [rip + injectChargeUltimateCall];"
+
+        "push rbx;"
+        "push rcx;"
+
+        "xor rcx,rcx;"
+
+       /* "cmp rdi, qword ptr [rip + playerIdentAddress1];"
+        "jne exitUltimateCharge;"*/
+
+        //TODO: convert to proper stem for adding more custom ET/UT but rn just needed for bow anyway lol
+        "mov rbx, qword ptr [ rip + pAnimAddress];"
+        "mov rcx,0x01;"
+        //"cmp word ptr [rbx],0x97F;"
+        /*"cmp r11,0x97F;"
+        "je isBowCharge;"*/
+
+        //"cmp word ptr [rbx],0x994;"
+        "cmp r11,0x994;"
+        "je isBowCharge;"
+
+        //"cmp word ptr [rbx],0x995;"
+        "cmp r11,0x995;"
+        "je isBowCharge;"
+
+        "xor rcx,rcx;"
+        
+        "jmp exitUltimateCharge;"
+
+        "isBowCharge:"
+        "mov rax,rcx;"
+        "cmp r11,0x995;"
+        "jne exitUltimateCharge;"
+        "mov rcx,0x02;"
+        
+
+        "exitUltimateCharge:"
+        "mov [rip + canChargeCustomUltimate],cl;"
+        "test eax,eax;"
+        "jz ultimateChargeExit;"
+
+        "pop rcx;"
+        "pop rbx;"
+        "jmp qword ptr [rip + returnInjectChargeUltimate];"
+
+        "ultimateChargeExit:"
+        "pop rcx;"
+        "pop rbx;"
+        "jmp qword ptr [rip + injectChargeUltimateJE];"
+
+
+       
+        );
+}
+
+
 __attribute__((naked)) void InjectCamShake() {
 
     __asm(".intel_syntax noprefix;"
@@ -397,45 +495,27 @@ void  __attribute__((naked))InjectAIDodge() {
         //FUTURE STUFF and make into better format, for now IF state and nasty 0 checks are ok for 2 ents lol
 
         "xor rbx,rbx;"
+
         "movzx rbx, byte ptr [rip + isNinjaDodgeBlockChance];"
+        "cmp cx, 0x009C;"
+        "je checkDodge;"
 
-        "cmp rbx,0x64;"
-        "jz exitAIDodge;"
-
-        "cmp cx,0x009C;"
-        "je aiDodgeISNinja;"
+        "movzx rbx, byte ptr [rip + brownNinjaDodgeBlockChance];"
+        "cmp cx, 0x0008;"
+        "je checkDodge;"
 
         "movzx rbx, byte ptr [rip + isFiendNinjaDodgeBlockChance];"
-
-        "cmp rbx,0x64;"
-        "jz exitAIDodge;"
-
-        "cmp cx,0x0070;"
-        "je aiDodgeFiendISNinja;"
+        "cmp cx, 0x0070;"
+        "je checkDodge;"
 
         "movzx rbx, byte ptr [rip + lizDodgeBlockChance];"
-
-        "cmp rbx,0x64;"
-        "jz exitAIDodge;"
-
-        "cmp cx,0x0012;"
-        "je aiDodgeLiz;"
+        "cmp cx, 0x0012;"
+        "je checkDodge;"
 
         "jmp exitAIDodge;"
 
 
-        "aiDodgeISNinja:"
-        "cmp dx,bx;"
-        "ja disableDodgeBlock;"
-        "jmp exitAIDodge ;"
-
-        "aiDodgeFiendISNinja:"
-        "cmp dx,bx;"
-        "ja disableDodgeBlock;"
-        "jmp exitAIDodge ;"
-
-
-        "aiDodgeLiz:"
+        "checkDodge:"
         "cmp dx,bx;"
         "ja disableDodgeBlock;"
         "jmp exitAIDodge ;"
@@ -512,7 +592,7 @@ void __attribute__((naked))InjectDelimb1() {
         "cmp r14,0xFFFF;"
         "je 2f;"
         "cmp r10,0x94;"
-        "je setResistanceMax;"
+        "je setResistanceBowCheck;"
         /*"cmp r14,0xC7C;"
          "je 3f;"
          "cmp r14,0xC7A;"
@@ -609,6 +689,16 @@ void __attribute__((naked))InjectDelimb1() {
         "cmp rdx,r14;"
         "jne setDelimb2;"
         "movss xmm15, [rip+highDelimbMulp];"
+        "jmp setDelimb2;"
+
+        "setResistanceBowCheck:"
+        "cmp r14d,0x0A49;"
+        "je isBowUT;"
+        "cmp r14d,0x0A48;"
+        "je isBowUT;"
+        "jmp setResistanceMax;"
+        "isBowUT:"
+        "movss xmm15, [rip+bowChargeDelimbMulp];"
         "jmp setDelimb2;"
 
         "1:"
@@ -832,6 +922,15 @@ void  __attribute__((naked))InjectAnim() {
         "cmp byte ptr [rbp + 0x3380DE6],0x21;"
         "je isPFang;"
 
+        "cmp di,0x09AC;"
+        "je isPBowUTCheck;"
+
+        "cmp di,0x0A49;"
+        "je isPBowUTCheck;"
+
+        "cmp di,0x0A48;"
+        "je isPBowUTCheck;"
+
         "mov rdx,0x0C72;"
         "cmp word ptr [rbp + 0x3380E30],0x03E0;"
         "je pWindPath;"
@@ -843,6 +942,26 @@ void  __attribute__((naked))InjectAnim() {
          "je isPDualSwords;"*/
 
             "jmp exitAnim;"
+
+        "isPBowUTCheck:"
+        "mov di,0x09AC;"
+        "movss xmm0, [rbp + 0x03625724];"
+        "movss xmm1, [rip + utChargeTime];"
+        "comiss xmm0,xmm1;"
+        "jb isPBowETCheck;"
+        "mov byte ptr [rip + canChargeCustomUltimate],0x00;"
+        "mov di,0x0A49;"
+        "jmp exitAnim;"
+
+        "isPBowETCheck:"
+        "movss xmm1, [rip + etChargeTime];"
+        "comiss xmm0,xmm1;"
+        "jb exitAnim;"
+        "mov di,0x0A48;"
+        "jmp exitAnim;"
+
+
+        
 
         "cmp byte ptr [rbp + 0x3380DE8],0xA0;"
         "jne exitAnim;"
@@ -3047,6 +3166,8 @@ void  __attribute__((naked))InjectC() {
             "jne exitInjectC;"
             "mov BYTE PTR [rip + cDeleteEnemy], 0x01;"
             "cmp BYTE PTR [r10], 0x05;"
+            "jae exitInjectC;"
+            "cmp BYTE PTR [r12], 0x06;"
             "jae exitInjectC;"
             "mov DWORD PTR [r8], 0x0F0F;"
             "cmp BYTE PTR [rip + cBattleRespawnCount], 0x1F;"
