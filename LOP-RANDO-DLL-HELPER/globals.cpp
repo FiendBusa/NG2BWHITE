@@ -114,8 +114,8 @@ float mentorEnemyDmgReductionMulp = 1.00f;
 float warriorEnemyDmgReductionMulp = 1.00f;
 float fsDelimbMulp = 1.50;
 float bowChargeDelimbMulp = 5.00f;
-float bowETDmgMulp = 1.00f;
-float bowUTDmgMulp = 5.00f;
+float bowETDmgMulp = 1.50f;
+float bowUTDmgMulp = 3.50f;
 
 //CHANGED TO INCLUDE MENTOR AND WARRIOR
 DWORD_PTR masterEnemyHPMulpAddress[] = {

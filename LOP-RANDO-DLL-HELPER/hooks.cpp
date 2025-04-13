@@ -757,6 +757,8 @@ void __attribute__((naked)) InjectDelimb2() {
         "je canStartDelimb2;"
         "cmp si, 0x070;"
         "je canStartDelimb2;"
+        "cmp si, 0x008;"
+        "je canStartDelimb2;"
         "jmp 1f;"
         "canStartDelimb2:"
         "movss xmm15, [rip+newVal2];"

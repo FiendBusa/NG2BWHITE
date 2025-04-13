@@ -93,8 +93,8 @@ void LoadConfig() {
     warriorEnemyDmgReductionMulp = ini.GetDoubleValue(L"DELIMB", L"warriorEnemyDmgReductionMulp", 1.00f);
     fsDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"fsDelimbMulp", 1.50f);
     bowChargeDelimbMulp = ini.GetDoubleValue(L"DELIMB", L"bowChargeDelimbMulp", 5.00f);
-    bowETDmgMulp = ini.GetDoubleValue(L"DELIMB", L"bowETDmgMulp", 1.00f);
-    bowUTDmgMulp = ini.GetDoubleValue(L"DELIMB", L"bowUTDmgMulp", 5.00f);
+    bowETDmgMulp = ini.GetDoubleValue(L"DELIMB", L"bowETDmgMulp", 1.50f);
+    bowUTDmgMulp = ini.GetDoubleValue(L"DELIMB", L"bowUTDmgMulp", 3.50f);
 
     //MURAMASA
     //weaponUpgradeCost = static_cast<uint16_t>(ini.GetLongValue(L"SHOP", L"weaponUpgradeCost", 30000));
@@ -622,10 +622,10 @@ DWORD WINAPI MainThread(LPVOID param) {
             }
         }         
         
-        if (GetAsyncKeyState(0x25) & 0x8000) {
+       /* if (GetAsyncKeyState(0x25) & 0x8000) {
             *(BYTE*)openMuramasaShopAddress = 0x01;
             Sleep(1000);
-        }
+        }*/
 
         Sleep(10);
 
