@@ -1,1 +1,1 @@
-Designed to aid the randomize: https://www.nexusmods.com/liesofp/mods/199
+https://www.nexusmods.com/ninjagaiden2black/mods/30
